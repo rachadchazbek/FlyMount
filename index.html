@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ÉlasT1 : la montée à la volée avec tes souliers de route</title>
+<meta name="description" content="Une languette adhésive amovible et un élastique pour garder tes souliers de route à l'horizontale en T1. Précommande à 7,99 $, livraison mi-décembre 2026.">
+<meta property="og:title" content="ÉlasT1 : la montée à la volée avec tes souliers de route">
+<meta property="og:description" content="Précommande à 7,99 $ au lieu de 15,99 $. Paiement par virement Interac, livraison mi-décembre 2026.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --carpet: #1746c7;       /* blue transition-zone carpet */
+    --carpet-deep: #0f2f8f;
+    --paint: #ffffff;        /* mount-line paint */
+    --paper: #f2f4f8;        /* bib paper */
+    --asphalt: #23262d;
+    --band: #f2b544;         /* rubber band */
+    --muted: #596070;
+    --rule: #d3d9e4;
+    --error: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--asphalt);
+    background: var(--paper);
+  }
+  h1, h2, h3, p, ol, ul, dl, dd, figure, fieldset { margin: 0; padding: 0; }
+  fieldset { border: 0; min-width: 0; }
+  ol, ul { list-style: none; }
+  a { color: inherit; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 3px solid var(--carpet); outline-offset: 2px; }
+  .on-blue :focus-visible { outline-color: var(--band); }
+
+  .wrap { max-width: 1120px; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 2.5rem); }
+  .display { font-stretch: 62%; font-weight: 800; line-height: .96; }
+  .section-pad { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .section-title { font-size: clamp(2.25rem, 5vw, 3.5rem); margin-bottom: 1.25rem; }
+  .lede { max-width: 62ch; }
+  .muted { color: var(--muted); }
+
+  /* Buttons */
+  .btn {
+    display: inline-block; border: 0; border-radius: 8px; cursor: pointer;
+    background: var(--band); color: var(--asphalt);
+    font-weight: 700; font-size: 1.125rem; text-decoration: none;
+    padding: .95rem 1.5rem; line-height: 1.2;
+  }
+  .btn:hover { background: #ffc85c; }
+  .btn[disabled] { opacity: .6; cursor: progress; }
+  .btn-quiet {
+    background: transparent; color: inherit; border: 1.5px solid currentColor;
+    font-size: 1rem; padding: .55rem 1rem;
+  }
+  .btn-quiet:hover { background: rgba(127, 140, 170, .16); }
+
+  /* Hero */
+  .hero {
+    background-color: var(--carpet);
+    background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1.3px);
+    background-size: 6px 6px;
+    color: #fff;
+  }
+  .nav { display: flex; align-items: center; gap: 1rem; padding-block: 1.25rem; }
+  .brand { font-size: 1.9rem; margin-right: auto; letter-spacing: .01em; }
+  .lang { display: flex; border: 1.5px solid rgba(255, 255, 255, .7); border-radius: 8px; overflow: hidden; }
+  .lang button { background: transparent; border: 0; color: #fff; padding: .45rem .7rem; font-weight: 600; cursor: pointer; }
+  .lang button[aria-pressed="true"] { background: #fff; color: var(--carpet); }
+  .hero-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem); align-items: center;
+    padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 7vw, 5rem);
+  }
+  .hero h1 { font-size: clamp(2.9rem, 7.4vw, 5.75rem); margin-bottom: 1.5rem; }
+  .hero .lede { font-size: 1.1875rem; max-width: 52ch; }
+  .offer { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1rem; margin-block: 2rem 1.25rem; }
+  .offer-now { font-size: 3.25rem; color: var(--band); }
+  .offer-was { text-decoration: line-through; opacity: .8; font-size: 1.25rem; }
+  .offer-note { font-size: 1.0625rem; }
+  .assure { margin-top: 1rem; font-size: .975rem; max-width: 46ch; opacity: .92; }
+  .schema svg { display: block; width: 100%; height: auto; }
+  .schema figcaption { font-size: .9rem; opacity: .85; margin-top: .75rem; }
+  .elastic { stroke-dasharray: 100; stroke-dashoffset: 100; animation: taut .8s .35s cubic-bezier(.2, .9, .3, 1.2) forwards; }
+  @keyframes taut { to { stroke-dashoffset: 0; } }
+
+  /* Mount line: the painted stripe at the T1 exit */
+  .mountline { background: var(--paint); color: var(--carpet); }
+  .mountline p { font-size: 1.35rem; padding-block: .7rem; letter-spacing: .02em; }
+
+  /* Problem */
+  .problem-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: start; }
+  .problem-grid .section-title { margin-bottom: 0; }
+
+  /* Placeholder slots for photos and video */
+  .slot {
+    display: grid; place-items: center; text-align: center;
+    aspect-ratio: 4 / 3; padding: 1rem;
+    border: 1.5px dashed #9aa5ba; border-radius: 10px;
+    background: repeating-linear-gradient(135deg, #e7ebf2 0 12px, #edf0f6 12px 24px);
+    color: var(--muted); font-size: .95rem; font-weight: 600;
+  }
+  .slot-video { aspect-ratio: 16 / 9; max-width: 760px; margin-top: clamp(2.5rem, 6vw, 4rem); }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 2.5rem; counter-reset: step; }
+  .steps li { counter-increment: step; border-top: 3px solid var(--asphalt); padding-top: 1rem; }
+  .steps li::before { content: counter(step); display: block; font-stretch: 62%; font-weight: 800; font-size: 3.5rem; line-height: 1; color: var(--carpet); margin-bottom: .75rem; }
+  .steps h3 { font-size: 1.3rem; line-height: 1.25; margin-block: 1.1rem .4rem; }
+
+  /* Kit and bib */
+  .kit { background: #fff; }
+  .kit-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+  .kit-list li { padding-block: .9rem; border-bottom: 1px solid var(--rule); max-width: 56ch; }
+  .kit-list li:first-child { border-top: 1px solid var(--rule); }
+  .bib {
+    position: relative; background: var(--paper); border-radius: 16px; overflow: hidden;
+    transform: rotate(-2deg); text-align: center;
+    box-shadow: 0 1px 0 #c5cbd8, 0 18px 30px -18px rgba(15, 47, 143, .45);
+    max-width: 420px; margin-inline: auto;
+  }
+  .bib-top { background: var(--carpet); color: #fff; padding: 1.4rem 1rem .8rem; font-size: 1.5rem; }
+  .bib-number { font-size: clamp(5rem, 14vw, 8.5rem); padding: 1rem .5rem .25rem; }
+  .bib-foot { padding: 0 1rem 1.9rem; color: var(--muted); }
+  .bib-foot s { color: var(--asphalt); }
+  .pin { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #fff; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .45); }
+  .pin.tl { top: 10px; left: 12px; } .pin.tr { top: 10px; right: 12px; }
+  .pin.bl { bottom: 10px; left: 12px; } .pin.br { bottom: 10px; right: 12px; }
+  .kit-cta { margin-top: 2rem; }
+
+  /* Order */
+  .order-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: start; margin-top: 2rem; }
+  .panel { background: #fff; border-radius: 14px; padding: clamp(1.25rem, 3.5vw, 2.25rem); }
+  .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 1.25rem; }
+  .field-wide { grid-column: 1 / -1; }
+  label, legend { font-weight: 600; display: block; margin-bottom: .35rem; }
+  .hint { font-size: .9rem; color: var(--muted); margin-top: .35rem; }
+  input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+    width: 100%; background: #fff; border: 1.5px solid #8b94a7; border-radius: 8px; padding: .7rem .8rem;
+  }
+  textarea { min-height: 5.5rem; resize: vertical; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { border-color: var(--carpet); }
+  .choice { display: flex; gap: .7rem; align-items: flex-start; padding: .8rem .9rem; border: 1.5px solid var(--rule); border-radius: 8px; font-weight: 400; margin-bottom: .5rem; cursor: pointer; }
+  .choice:has(input:checked) { border-color: var(--carpet); background: #eef2fd; }
+  .choice input { margin-top: .3rem; accent-color: var(--carpet); width: 1.05rem; height: 1.05rem; flex: none; }
+  .choice strong { display: block; }
+  .choice small { color: var(--muted); font-size: .9rem; }
+  .trap { position: absolute; left: -9999px; }
+  .form-actions { margin-top: 1.5rem; }
+  .form-error { color: var(--error); font-weight: 600; margin-top: .75rem; }
+
+  .summary { position: sticky; top: 1.25rem; }
+  .summary h3 { font-size: 1.15rem; margin-bottom: .75rem; }
+  .summary dl div { display: flex; justify-content: space-between; gap: 1rem; padding-block: .55rem; border-bottom: 1px solid var(--rule); }
+  .summary dt { color: var(--muted); }
+  .summary dd { font-weight: 600; text-align: right; }
+  .summary .total dd { font-size: 1.9rem; }
+  .summary .total { border-bottom: 0; align-items: baseline; }
+
+  /* Payment instructions */
+  .confirm h3 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: .75rem; }
+  .pay { margin-block: 1.5rem; border-top: 3px solid var(--asphalt); }
+  .pay div { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; gap: .75rem; align-items: center; padding-block: .8rem; border-bottom: 1px solid var(--rule); }
+  .pay dt { color: var(--muted); }
+  .pay dd { font-weight: 700; font-size: 1.15rem; overflow-wrap: anywhere; }
+  .copy { background: #fff; border: 1.5px solid var(--asphalt); border-radius: 8px; padding: .4rem .8rem; font-weight: 600; font-size: .95rem; cursor: pointer; min-width: 5.5rem; }
+  .copy:hover { background: var(--paper); }
+  .backup { background: #fff6df; border-left: 5px solid var(--band); padding: 1rem 1.1rem; border-radius: 0 8px 8px 0; margin-block: 1.25rem; }
+  .backup .btn { margin-top: .75rem; font-size: 1rem; padding: .7rem 1.1rem; }
+  .confirm-actions { margin-top: 1.5rem; }
+
+  /* FAQ */
+  .faq details { border-bottom: 1px solid var(--rule); max-width: 760px; }
+  .faq details:first-of-type { border-top: 3px solid var(--asphalt); }
+  .faq summary { cursor: pointer; font-weight: 700; font-size: 1.15rem; padding-block: 1rem; }
+  .faq details p { padding-bottom: 1.1rem; max-width: 64ch; }
+
+  footer { background: var(--asphalt); color: #e6e9ef; padding-block: 2.25rem; font-size: .975rem; }
+  footer :focus-visible { outline-color: var(--band); }
+
+  @media (max-width: 860px) {
+    .hero-grid, .problem-grid, .kit-grid, .order-grid { grid-template-columns: minmax(0, 1fr); }
+    .steps { grid-template-columns: minmax(0, 1fr); }
+    .steps .slot { aspect-ratio: 16 / 9; }
+    .summary { position: static; }
+    .order-grid .summary { order: -1; }
+  }
+  @media (max-width: 560px) {
+    .fields { grid-template-columns: minmax(0, 1fr); }
+    .nav .btn-quiet { display: none; }
+    .pay div { grid-template-columns: minmax(0, 1fr) auto; }
+    .pay dt { grid-column: 1 / -1; margin-bottom: -.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .elastic { animation: none; stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero on-blue">
+  <div class="wrap">
+    <nav class="nav" aria-label="Navigation">
+      <span class="brand display" data-brand>ÉlasT1</span>
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn-quiet" href="#commande" data-i18n="nav.cta">Précommander</a>
+    </nav>
+
+    <div class="hero-grid">
+      <div>
+        <h1 class="display" data-i18n="hero.title">La montée à la volée, avec tes souliers de route.</h1>
+        <p class="lede" data-i18n="hero.lede"></p>
+        <p class="offer">
+          <span class="offer-now display" data-price></span>
+          <span class="offer-was" data-regular></span>
+          <span class="offer-note" data-i18n="hero.offer"></span>
+        </p>
+        <a class="btn" href="#commande" data-i18n="hero.cta"></a>
+        <p class="assure" data-i18n="hero.assure"></p>
+      </div>
+
+      <figure class="schema">
+        <svg viewBox="0 0 520 350" role="img" aria-labelledby="schema-title">
+          <title id="schema-title" data-i18n="schema.alt"></title>
+          <!-- bike, drawn faint -->
+          <g fill="none" stroke="#fff" stroke-opacity=".38" stroke-linecap="round">
+            <circle cx="96" cy="214" r="106" stroke-width="7"/>
+            <circle cx="96" cy="214" r="92" stroke-width="2"/>
+            <line x1="96" y1="214" x2="352" y2="232" stroke-width="7"/>
+            <line x1="96" y1="214" x2="322" y2="84" stroke-width="5"/>
+            <line x1="352" y1="232" x2="316" y2="52" stroke-width="8"/>
+            <line x1="352" y1="232" x2="512" y2="104" stroke-width="8"/>
+            <circle cx="352" cy="232" r="42" stroke-width="5"/>
+            <line x1="0" y1="322" x2="520" y2="322" stroke-width="3"/>
+          </g>
+          <circle cx="96" cy="214" r="8" fill="#fff"/>
+          <!-- crank and pedal -->
+          <line x1="352" y1="232" x2="268" y2="232" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+          <rect x="250" y="227" width="36" height="9" rx="3" fill="#fff"/>
+          <!-- road shoe, level on the pedal -->
+          <path d="M194 222 L318 222 Q336 220 331 207 Q323 195 296 189 L256 171 Q240 163 214 164 Q195 165 191 182 Q187 204 194 222 Z" fill="#fff"/>
+          <rect x="258" y="221" width="26" height="7" fill="#0f2f8f"/>
+          <g stroke="#1746c7" stroke-width="4" stroke-linecap="round">
+            <line x1="262" y1="180" x2="290" y2="206"/>
+            <line x1="282" y1="189" x2="306" y2="210"/>
+          </g>
+          <!-- heel tab and rubber band -->
+          <rect x="181" y="180" width="15" height="34" rx="7" fill="#f2b544"/>
+          <line class="elastic" pathLength="100" x1="184" y1="198" x2="103" y2="213" stroke="#f2b544" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- callouts -->
+          <g fill="#fff" font-family="Archivo, Arial, sans-serif" font-size="15" font-weight="600">
+            <text x="118" y="116" data-i18n="schema.tab"></text>
+            <text x="278" y="140" data-i18n="schema.shoe"></text>
+            <text x="92" y="262" data-i18n="schema.band"></text>
+          </g>
+          <g stroke="#fff" stroke-width="1.5">
+            <line x1="170" y1="124" x2="186" y2="176"/>
+            <line x1="300" y1="148" x2="284" y2="178"/>
+            <line x1="128" y1="246" x2="140" y2="212"/>
+          </g>
+        </svg>
+        <figcaption data-i18n="schema.caption"></figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="mountline"><div class="wrap"><p class="display" data-i18n="mountline"></p></div></div>
+</header>
+
+<main>
+  <section class="section-pad">
+    <div class="wrap problem-grid">
+      <h2 class="section-title display" data-i18n="problem.title"></h2>
+      <p class="lede" data-i18n="problem.body"></p>
+    </div>
+  </section>
+
+  <section class="section-pad" style="padding-top:0">
+    <div class="wrap">
+      <h2 class="section-title display" data-i18n="steps.title"></h2>
+      <ol class="steps">
+        <li>
+          <!-- Replace each .slot with <img src="img/etape-1.jpg" alt="..."> when the photos are ready -->
+          <div class="slot" data-i18n="slot.photo"></div>
+          <h3 data-i18n="steps.1.title"></h3>
+          <p data-i18n="steps.1.body"></p>
+        </li>
+        <li>
+          <div class="slot" data-i18n="slot.photo"></div>
+          <h3 data-i18n="steps.2.title"></h3>
+          <p data-i18n="steps.2.body"></p>
+        </li>
+        <li>
+          <div class="slot" data-i18n="slot.photo"></div>
+          <h3 data-i18n="steps.3.title"></h3>
+          <p data-i18n="steps.3.body"></p>
+        </li>
+      </ol>
+      <!-- Replace with <video controls src="img/demo.mp4"></video> or a YouTube embed -->
+      <div class="slot slot-video" data-i18n="slot.video"></div>
+    </div>
+  </section>
+
+  <section class="kit section-pad">
+    <div class="wrap kit-grid">
+      <div>
+        <h2 class="section-title display" data-i18n="kit.title"></h2>
+        <ul class="kit-list">
+          <li data-i18n="kit.1"></li>
+          <li data-i18n="kit.2"></li>
+          <li data-i18n="kit.3"></li>
+          <li data-i18n="kit.4"></li>
+        </ul>
+        <a class="btn kit-cta" href="#commande" data-i18n="hero.cta"></a>
+      </div>
+      <div class="bib">
+        <span class="pin tl"></span><span class="pin tr"></span><span class="pin bl"></span><span class="pin br"></span>
+        <p class="bib-top display" data-i18n="bib.top"></p>
+        <p class="bib-number display" data-price></p>
+        <p class="bib-foot"><span data-i18n="bib.regular"></span> <s data-regular></s></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad" id="commande">
+    <div class="wrap">
+      <h2 class="section-title display" data-i18n="order.title"></h2>
+      <p class="lede" data-i18n="order.lede"></p>
+
+      <div class="order-grid">
+        <div class="panel">
+          <form id="order-form" novalidate>
+            <div class="fields">
+              <div>
+                <label for="f-name" data-i18n="f.name"></label>
+                <input id="f-name" name="name" type="text" autocomplete="name" required>
+              </div>
+              <div>
+                <label for="f-email" data-i18n="f.email"></label>
+                <input id="f-email" name="email" type="email" autocomplete="email" required>
+              </div>
+              <div>
+                <label for="f-phone" data-i18n="f.phone"></label>
+                <input id="f-phone" name="phone" type="tel" autocomplete="tel">
+              </div>
+              <div>
+                <label for="f-qty" data-i18n="f.qty"></label>
+                <select id="f-qty" name="qty"></select>
+              </div>
+              <fieldset class="field-wide">
+                <legend data-i18n="f.delivery"></legend>
+                <label class="choice">
+                  <input type="radio" name="delivery" value="pickup" checked>
+                  <span><strong data-i18n="f.pickup"></strong><small data-i18n="f.pickup.hint"></small></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="delivery" value="shipping">
+                  <span><strong data-i18n="f.shipping"></strong><small data-i18n="f.shipping.hint"></small></span>
+                </label>
+              </fieldset>
+              <div class="field-wide" id="address-field" hidden>
+                <label for="f-address" data-i18n="f.address"></label>
+                <textarea id="f-address" name="address" autocomplete="street-address"></textarea>
+              </div>
+              <div class="field-wide">
+                <label for="f-gear" data-i18n="f.gear"></label>
+                <input id="f-gear" name="gear" type="text" data-i18n-ph="f.gear.ph">
+                <p class="hint" data-i18n="f.gear.hint"></p>
+              </div>
+              <div class="trap" aria-hidden="true">
+                <label for="f-site">Site</label>
+                <input id="f-site" name="website" type="text" tabindex="-1" autocomplete="off">
+              </div>
+              <label class="choice field-wide">
+                <input type="checkbox" name="ack" required>
+                <span data-i18n="f.ack"></span>
+              </label>
+            </div>
+            <p class="form-error" id="form-error" role="alert" hidden></p>
+            <div class="form-actions">
+              <button class="btn" type="submit" id="submit-btn" data-i18n="f.submit"></button>
+            </div>
+          </form>
+
+          <div class="confirm" id="confirm" hidden tabindex="-1">
+            <h3 class="display" data-i18n="c.title"></h3>
+            <p data-i18n="c.intro"></p>
+            <dl class="pay">
+              <div><dt data-i18n="c.payee"></dt><dd data-payee></dd><span></span></div>
+              <div><dt data-i18n="c.email"></dt><dd id="pay-email"></dd><button type="button" class="copy" data-copy="email" data-i18n="c.copy"></button></div>
+              <div id="pay-phone-row" hidden><dt data-i18n="c.phone"></dt><dd id="pay-phone"></dd><button type="button" class="copy" data-copy="phone" data-i18n="c.copy"></button></div>
+              <div><dt data-i18n="c.amount"></dt><dd id="pay-amount"></dd><button type="button" class="copy" data-copy="amount" data-i18n="c.copy"></button></div>
+              <div><dt data-i18n="c.message"></dt><dd id="pay-ref"></dd><button type="button" class="copy" data-copy="ref" data-i18n="c.copy"></button></div>
+            </dl>
+            <p data-i18n="c.auto"></p>
+            <p id="c-next" style="margin-top:.75rem"></p>
+            <div class="backup" id="backup" hidden>
+              <p data-i18n="c.backup"></p>
+              <a class="btn" id="backup-link" href="#" data-i18n="c.backup.cta"></a>
+            </div>
+            <div class="confirm-actions">
+              <button type="button" class="btn btn-quiet" id="edit-order" data-i18n="c.edit"></button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel summary" aria-live="polite">
+          <h3 data-i18n="s.title"></h3>
+          <dl>
+            <div><dt data-i18n="s.item"></dt><dd id="s-qty"></dd></div>
+            <div><dt data-i18n="s.delivery"></dt><dd id="s-delivery"></dd></div>
+            <div><dt data-i18n="s.when"></dt><dd data-i18n="s.when.value"></dd></div>
+            <div class="total"><dt data-i18n="s.total"></dt><dd class="display" id="s-total"></dd></div>
+          </dl>
+          <p class="hint" data-i18n="s.note"></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq section-pad" style="padding-top:0">
+    <div class="wrap">
+      <h2 class="section-title display" data-i18n="faq.title"></h2>
+      <details><summary data-i18n="faq.1.q"></summary><p data-i18n="faq.1.a"></p></details>
+      <details><summary data-i18n="faq.2.q"></summary><p data-i18n="faq.2.a"></p></details>
+      <details><summary data-i18n="faq.3.q"></summary><p data-i18n="faq.3.a"></p></details>
+      <details><summary data-i18n="faq.4.q"></summary><p data-i18n="faq.4.a"></p></details>
+      <details><summary data-i18n="faq.5.q"></summary><p data-i18n="faq.5.a"></p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><span data-i18n="footer.by"></span> <a id="footer-mail" href="#"></a></p>
+  </div>
+</footer>
+
+<noscript><p style="padding:1rem;background:#fff6df">Active JavaScript pour commander. / Turn on JavaScript to order.</p></noscript>
+
+<script>
+/* ------------------------------------------------------------------
+   Settings. Everything you are likely to change is here.
+------------------------------------------------------------------- */
+const CONFIG = {
+  brand: "ÉlasT1",                          // working name
+  price: 7.99,                              // pre-order price, CAD
+  regularPrice: 15.99,
+  maxQty: 5,
+  payeeName: "Rachad Chazbek",
+  interacEmail: "rachadchazbek@gmail.com",
+  interacPhone: "",                         // optional, e.g. "514 555-0123"
+  // URL that receives each order (Google Apps Script web app, see README).
+  // While empty, buyers are asked to email their order instead.
+  orderEndpoint: ""
+};
+
+const I18N = {
+  fr: {
+    "page.title": "{brand} : la montée à la volée avec tes souliers de route",
+    "nav.cta": "Précommander",
+    "hero.title": "La montée à la volée, avec tes souliers de route.",
+    "hero.lede": "{brand} est une languette adhésive amovible qui se colle au talon et retient un élastique. Tes souliers restent à l'horizontale sur les pédales, prêts pour la sortie de T1. Pas besoin de souliers de triathlon.",
+    "hero.offer": "en précommande, livraison mi-décembre 2026",
+    "hero.cta": "Précommander à {price}",
+    "hero.assure": "Paiement par virement Interac. Remboursement complet sur demande avant la livraison.",
+    "schema.alt": "Schéma : un soulier de route à l'horizontale sur la pédale, retenu par un élastique entre une languette au talon et l'axe arrière du vélo.",
+    "schema.tab": "Languette adhésive",
+    "schema.shoe": "Ton soulier de route",
+    "schema.band": "Élastique",
+    "schema.caption": "Schéma du concept. Photos et vidéo à venir.",
+    "mountline": "Ligne de montée",
+    "problem.title": "Les souliers de route n'ont pas de boucle au talon.",
+    "problem.body": "Les souliers de triathlon ont une boucle au talon où passer un élastique. Les souliers de route n'en ont pas, alors on les enfile souvent dans la zone de transition, puis on court avec les cales jusqu'à la ligne de montée. {brand} ajoute ce point d'attache aux souliers que tu as déjà.",
+    "steps.title": "Comment ça marche",
+    "steps.1.title": "Colle la languette",
+    "steps.1.body": "Colle une languette au talon de chaque soulier. L'adhésif est amovible : tu peux la retirer après la course.",
+    "steps.2.title": "Accroche l'élastique",
+    "steps.2.body": "Clipse tes souliers sur les pédales, puis tends un élastique entre chaque languette et un point fixe du vélo, comme l'axe arrière. Les souliers restent à l'horizontale.",
+    "steps.3.title": "Saute en selle",
+    "steps.3.body": "À la ligne de montée, pose les pieds sur tes souliers et pédale. Les élastiques cèdent aux premiers coups de pédale, et tu enfiles tes souliers en roulant.",
+    "slot.photo": "Photo à venir",
+    "slot.video": "Vidéo de démonstration à venir",
+    "kit.title": "Ce que tu reçois",
+    "kit.1": "Des languettes adhésives amovibles pour tes deux souliers.",
+    "kit.2": "Des élastiques pour tes prochaines courses.",
+    "kit.3": "Conçu pour les souliers de vélo de route et les pédales automatiques.",
+    "kit.4": "Si ça ne convient pas à ton équipement, on te rembourse.",
+    "bib.top": "Précommande",
+    "bib.regular": "Prix régulier",
+    "order.title": "Précommande ton ensemble",
+    "order.lede": "Tu paies maintenant par virement Interac et tu reçois ton ensemble à la mi-décembre 2026. Remplis le formulaire : les instructions de paiement s'affichent tout de suite après.",
+    "f.name": "Nom complet",
+    "f.email": "Courriel",
+    "f.phone": "Téléphone (facultatif)",
+    "f.qty": "Quantité",
+    "f.delivery": "Comment veux-tu recevoir ton ensemble ?",
+    "f.pickup": "Remise en main propre",
+    "f.pickup.hint": "Région de Montréal et Laval. Gratuit.",
+    "f.shipping": "Livraison par la poste",
+    "f.shipping.hint": "On partage les frais de poste moitié-moitié. On te confirme le montant par courriel avant l'envoi.",
+    "f.address": "Adresse de livraison",
+    "f.gear": "Tes souliers et tes pédales (facultatif)",
+    "f.gear.ph": "ex. Shimano RC3, pédales Look Keo",
+    "f.gear.hint": "Ça nous aide à vérifier la compatibilité avant de te livrer.",
+    "f.ack": "Je comprends que c'est une précommande : je paie maintenant et je reçois mon ensemble à la mi-décembre 2026.",
+    "f.submit": "Passer la commande",
+    "f.sending": "Envoi en cours",
+    "err.required": "Il manque ton nom ou ton courriel.",
+    "err.email": "Vérifie ton adresse courriel.",
+    "err.address": "Ajoute ton adresse de livraison.",
+    "err.ack": "Coche la case pour confirmer que tu as compris que c'est une précommande.",
+    "c.title": "Commande passée. Il reste le virement.",
+    "c.intro": "Ouvre l'appli de ta banque et envoie un virement Interac avec ces informations.",
+    "c.payee": "Destinataire",
+    "c.email": "Courriel",
+    "c.phone": "Ou par téléphone",
+    "c.amount": "Montant",
+    "c.message": "Message",
+    "c.copy": "Copier",
+    "c.copied": "Copié",
+    "c.auto": "Le dépôt automatique est activé : aucune question de sécurité à créer.",
+    "c.next": "Ta commande est confirmée dès qu'on reçoit le virement. On t'écrit ensuite à {buyer}.",
+    "c.backup": "Dernière étape : envoie-nous le détail de ta commande par courriel pour qu'on sache où la livrer.",
+    "c.backup.cta": "Envoyer ma commande par courriel",
+    "c.edit": "Modifier ma commande",
+    "s.title": "Ta commande",
+    "s.item": "Ensemble {brand}",
+    "s.delivery": "Remise",
+    "s.delivery.pickup": "En main propre, gratuit",
+    "s.delivery.shipping": "Par la poste, frais partagés",
+    "s.when": "Livraison",
+    "s.when.value": "Mi-décembre 2026",
+    "s.total": "À payer maintenant",
+    "s.note": "Un ensemble équipe une paire de souliers.",
+    "faq.title": "Questions fréquentes",
+    "faq.1.q": "Quand est-ce que je reçois mon ensemble ?",
+    "faq.1.a": "À la mi-décembre 2026. On t'écrit pour organiser la remise en main propre ou l'envoi par la poste.",
+    "faq.2.q": "Et si je change d'idée ?",
+    "faq.2.a": "Écris à {email} avant la livraison et on te rembourse au complet par virement Interac. Si on ne peut pas livrer comme prévu, on te rembourse automatiquement.",
+    "faq.3.q": "Est-ce que ça convient à mes souliers ?",
+    "faq.3.a": "{brand} est conçu pour les souliers de vélo de route et les pédales automatiques. Indique ton modèle dans le formulaire. Si ça ne convient pas à ton équipement, on te rembourse.",
+    "faq.4.q": "Pourquoi {price} au lieu de {regular} ?",
+    "faq.4.a": "C'est le prix pour les personnes qui commandent avant la production. Le prix régulier sera de {regular}.",
+    "faq.5.q": "Je n'ai jamais fait de montée à la volée. Je commence comment ?",
+    "faq.5.a": "Pratique la manœuvre quelques fois dans un stationnement tranquille avant ta course. Elle demande un peu d'habitude, avec ou sans {brand}.",
+    "footer.by": "{brand} est un projet de {payee}, dans la région de Montréal. Une question ?",
+    "mail.subject": "Commande {ref}",
+    "mail.labels": ["Référence", "Nom", "Courriel", "Téléphone", "Quantité", "Total", "Remise", "Adresse", "Souliers et pédales"]
+  },
+  en: {
+    "page.title": "{brand}: the flying mount with your road shoes",
+    "nav.cta": "Pre-order",
+    "hero.title": "The flying mount, with the road shoes you already own.",
+    "hero.lede": "{brand} is a removable adhesive tab that sticks to the heel and holds a rubber band. Your shoes stay level on the pedals, ready for the T1 exit. No triathlon shoes required.",
+    "hero.offer": "pre-order price, delivery mid-December 2026",
+    "hero.cta": "Pre-order for {price}",
+    "hero.assure": "Pay by Interac e-Transfer. Full refund on request any time before delivery.",
+    "schema.alt": "Diagram: a road shoe held level on the pedal by a rubber band running from a heel tab to the bike's rear axle.",
+    "schema.tab": "Adhesive tab",
+    "schema.shoe": "Your road shoe",
+    "schema.band": "Rubber band",
+    "schema.caption": "Concept diagram. Photos and video coming soon.",
+    "mountline": "Mount line",
+    "problem.title": "Road shoes have no heel loop.",
+    "problem.body": "Triathlon shoes have a loop at the heel to thread a rubber band through. Road shoes don't, so you often end up putting them on in transition and running in cleats to the mount line. {brand} adds that anchor point to the shoes you already own.",
+    "steps.title": "How it works",
+    "steps.1.title": "Stick on the tab",
+    "steps.1.body": "Stick one tab on the heel of each shoe. The adhesive is removable, so you can take it off after the race.",
+    "steps.2.title": "Hook the rubber band",
+    "steps.2.body": "Clip your shoes onto the pedals, then stretch a rubber band from each tab to a fixed point on the bike, such as the rear axle. The shoes stay level.",
+    "steps.3.title": "Jump on",
+    "steps.3.body": "At the mount line, put your feet on top of your shoes and pedal. The bands give way on the first pedal strokes, and you slip your feet in while rolling.",
+    "slot.photo": "Photo coming soon",
+    "slot.video": "Demo video coming soon",
+    "kit.title": "What you get",
+    "kit.1": "Removable adhesive tabs for both of your shoes.",
+    "kit.2": "Rubber bands for your next races.",
+    "kit.3": "Designed for road cycling shoes and clipless pedals.",
+    "kit.4": "If it doesn't fit your setup, we refund you.",
+    "bib.top": "Pre-order",
+    "bib.regular": "Regular price",
+    "order.title": "Pre-order your kit",
+    "order.lede": "You pay now by Interac e-Transfer and receive your kit in mid-December 2026. Fill in the form and the payment instructions appear right after.",
+    "f.name": "Full name",
+    "f.email": "Email",
+    "f.phone": "Phone (optional)",
+    "f.qty": "Quantity",
+    "f.delivery": "How do you want to receive your kit?",
+    "f.pickup": "Local hand-off",
+    "f.pickup.hint": "Montréal and Laval area. Free.",
+    "f.shipping": "Shipping by mail",
+    "f.shipping.hint": "We split the postage 50/50. We confirm the amount by email before shipping.",
+    "f.address": "Shipping address",
+    "f.gear": "Your shoes and pedals (optional)",
+    "f.gear.ph": "e.g. Shimano RC3, Look Keo pedals",
+    "f.gear.hint": "This helps us check the fit before we deliver.",
+    "f.ack": "I understand this is a pre-order: I pay now and receive my kit in mid-December 2026.",
+    "f.submit": "Place order",
+    "f.sending": "Sending",
+    "err.required": "Your name or email is missing.",
+    "err.email": "Check your email address.",
+    "err.address": "Add your shipping address.",
+    "err.ack": "Tick the box to confirm you understand this is a pre-order.",
+    "c.title": "Order placed. Now send the e-Transfer.",
+    "c.intro": "Open your banking app and send an Interac e-Transfer with these details.",
+    "c.payee": "Recipient",
+    "c.email": "Email",
+    "c.phone": "Or by phone",
+    "c.amount": "Amount",
+    "c.message": "Message",
+    "c.copy": "Copy",
+    "c.copied": "Copied",
+    "c.auto": "Autodeposit is on, so there is no security question to set up.",
+    "c.next": "Your order is confirmed as soon as we receive the transfer. We'll then write to you at {buyer}.",
+    "c.backup": "One last step: email us your order details so we know where to deliver it.",
+    "c.backup.cta": "Email my order",
+    "c.edit": "Edit my order",
+    "s.title": "Your order",
+    "s.item": "{brand} kit",
+    "s.delivery": "Delivery",
+    "s.delivery.pickup": "Local hand-off, free",
+    "s.delivery.shipping": "By mail, postage split",
+    "s.when": "Arrives",
+    "s.when.value": "Mid-December 2026",
+    "s.total": "Pay now",
+    "s.note": "One kit fits one pair of shoes.",
+    "faq.title": "Common questions",
+    "faq.1.q": "When do I get my kit?",
+    "faq.1.a": "In mid-December 2026. We'll write to you to arrange the hand-off or the shipment.",
+    "faq.2.q": "What if I change my mind?",
+    "faq.2.a": "Write to {email} before delivery and we refund you in full by Interac e-Transfer. If we can't deliver as planned, we refund you automatically.",
+    "faq.3.q": "Will it fit my shoes?",
+    "faq.3.a": "{brand} is designed for road cycling shoes and clipless pedals. Tell us your model in the form. If it doesn't fit your setup, we refund you.",
+    "faq.4.q": "Why {price} instead of {regular}?",
+    "faq.4.a": "That's the price for people who order before production. The regular price will be {regular}.",
+    "faq.5.q": "I've never done a flying mount. Where do I start?",
+    "faq.5.a": "Practise the move a few times in a quiet parking lot before race day. It takes some getting used to, with or without {brand}.",
+    "footer.by": "{brand} is a project by {payee}, in the Montréal area. Questions?",
+    "mail.subject": "Order {ref}",
+    "mail.labels": ["Reference", "Name", "Email", "Phone", "Quantity", "Total", "Delivery", "Address", "Shoes and pedals"]
+  }
+};
+
+/* ------------------------------------------------------------------ */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const store = {
+  get(area, key) { try { return window[area].getItem(key); } catch (e) { return null; } },
+  set(area, key, val) { try { window[area].setItem(key, val); } catch (e) { /* storage unavailable */ } },
+  del(area, key) { try { window[area].removeItem(key); } catch (e) { /* storage unavailable */ } }
+};
+
+let lang = "fr";
+let order = null;          // the placed order, once the form is submitted
+let needsBackup = false;   // true when the order could not be sent to the endpoint
+let keptRef = null;        // reference reused when the buyer edits a placed order
+
+function fillForm(o) {
+  const f = $("#order-form");
+  f.name.value = o.name || ""; f.email.value = o.email || ""; f.phone.value = o.phone || "";
+  f.qty.value = String(o.qty || 1); f.delivery.value = o.delivery || "pickup";
+  f.address.value = o.address || ""; f.gear.value = o.gear || "";
+}
+
+function money(n) {
+  return new Intl.NumberFormat(lang === "fr" ? "fr-CA" : "en-CA", { style: "currency", currency: "CAD" }).format(n);
+}
+function t(key, extra) {
+  const vars = Object.assign({
+    brand: CONFIG.brand, payee: CONFIG.payeeName, email: CONFIG.interacEmail,
+    price: money(CONFIG.price), regular: money(CONFIG.regularPrice)
+  }, extra);
+  const str = I18N[lang][key];
+  return typeof str === "string" ? str.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m)) : str;
+}
+
+function formValues() {
+  const f = $("#order-form");
+  const qty = Math.max(1, Math.min(CONFIG.maxQty, parseInt(f.qty.value, 10) || 1));
+  return {
+    name: f.name.value.trim(), email: f.email.value.trim(), phone: f.phone.value.trim(),
+    qty, total: Math.round(qty * CONFIG.price * 100) / 100,
+    delivery: f.delivery.value, address: f.address.value.trim(), gear: f.gear.value.trim()
+  };
+}
+
+function render() {
+  document.documentElement.lang = lang;
+  document.title = t("page.title");
+  $$("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  $$("[data-i18n-ph]").forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  $$("[data-brand]").forEach(el => { el.textContent = CONFIG.brand; });
+  $$("[data-price]").forEach(el => { el.textContent = money(CONFIG.price); });
+  $$("[data-regular]").forEach(el => { el.textContent = money(CONFIG.regularPrice); });
+  $$("[data-payee]").forEach(el => { el.textContent = CONFIG.payeeName; });
+  $$(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  const mail = $("#footer-mail");
+  mail.textContent = CONFIG.interacEmail;
+  mail.href = "mailto:" + CONFIG.interacEmail;
+  renderSummary();
+  if (order) renderConfirm();
+}
+
+function renderSummary() {
+  const v = order || formValues();
+  $("#s-qty").textContent = "× " + v.qty;
+  $("#s-delivery").textContent = t("s.delivery." + v.delivery);
+  $("#s-total").textContent = money(v.total);
+  $("#address-field").hidden = formValues().delivery !== "shipping";
+}
+
+function mailtoLink(o) {
+  const L = t("mail.labels");
+  const rows = [o.ref, o.name, o.email, o.phone, o.qty, money(o.total), t("s.delivery." + o.delivery), o.address, o.gear];
+  const body = rows.map((val, i) => L[i] + " : " + (val || "-")).join("\n");
+  return "mailto:" + CONFIG.interacEmail +
+    "?subject=" + encodeURIComponent(t("mail.subject", { ref: o.ref })) +
+    "&body=" + encodeURIComponent(body);
+}
+
+function renderConfirm() {
+  $("#pay-email").textContent = CONFIG.interacEmail;
+  $("#pay-phone").textContent = CONFIG.interacPhone;
+  $("#pay-phone-row").hidden = !CONFIG.interacPhone;
+  $("#pay-amount").textContent = money(order.total);
+  $("#pay-ref").textContent = order.ref;
+  $("#c-next").textContent = t("c.next", { buyer: order.email });
+  $("#backup").hidden = !needsBackup;
+  $("#backup-link").href = mailtoLink(order);
+}
+
+function showConfirm(focus) {
+  $("#order-form").hidden = true;
+  $("#confirm").hidden = false;
+  renderConfirm();
+  renderSummary();
+  if (focus) {
+    $("#confirm").focus({ preventScroll: true });
+    $("#commande").scrollIntoView({ block: "start" });
+  }
+}
+
+function newRef() {
+  const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  const bytes = new Uint8Array(5);
+  (window.crypto || window.msCrypto).getRandomValues(bytes);
+  return "T1-" + Array.from(bytes, b => alphabet[b % alphabet.length]).join("");
+}
+
+function validate(v, f) {
+  if (!v.name || !v.email) return "err.required";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) return "err.email";
+  if (v.delivery === "shipping" && !v.address) return "err.address";
+  if (!f.ack.checked) return "err.ack";
+  return null;
+}
+
+async function sendOrder(o) {
+  if (!CONFIG.orderEndpoint) return false;
+  const data = new URLSearchParams();
+  Object.keys(o).forEach(k => data.append(k, o[k]));
+  data.append("lang", lang);
+  try {
+    // "no-cors" lets a static page post to a Google Apps Script web app.
+    await fetch(CONFIG.orderEndpoint, { method: "POST", mode: "no-cors", body: data });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+$("#order-form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const f = ev.currentTarget;
+  const v = formValues();
+  const err = validate(v, f);
+  const box = $("#form-error");
+  if (err) { box.textContent = t(err); box.hidden = false; return; }
+  box.hidden = true;
+
+  const btn = $("#submit-btn");
+  btn.disabled = true;
+  btn.textContent = t("f.sending");
+  const placed = Object.assign({ ref: keptRef || newRef() }, v);
+  const sent = f.website.value ? true : await sendOrder(placed);
+  btn.disabled = false;
+  btn.textContent = t("f.submit");
+
+  order = placed;
+  needsBackup = !sent;
+  store.set("sessionStorage", "elast1-order", JSON.stringify({ order, needsBackup }));
+  showConfirm(true);
+});
+
+$("#order-form").addEventListener("input", renderSummary);
+$("#order-form").addEventListener("change", renderSummary);
+
+$("#edit-order").addEventListener("click", () => {
+  keptRef = order.ref;                 // a corrected order keeps the same reference
+  fillForm(order);
+  order = null;
+  store.del("sessionStorage", "elast1-order");
+  $("#confirm").hidden = true;
+  $("#order-form").hidden = false;
+  renderSummary();
+  $("#f-name").focus();
+});
+
+$$(".copy").forEach(btn => btn.addEventListener("click", async () => {
+  const values = {
+    email: CONFIG.interacEmail, phone: CONFIG.interacPhone,
+    amount: order ? order.total.toFixed(2) : "", ref: order ? order.ref : ""
+  };
+  const text = values[btn.dataset.copy];
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e2) { /* nothing more to try */ }
+    ta.remove();
+  }
+  btn.textContent = t("c.copied");
+  setTimeout(() => { btn.textContent = t("c.copy"); }, 1600);
+}));
+
+$$(".lang button").forEach(b => b.addEventListener("click", () => {
+  lang = b.dataset.lang;
+  store.set("localStorage", "elast1-lang", lang);
+  render();
+}));
+
+(function init() {
+  const qty = $("#f-qty");
+  for (let i = 1; i <= CONFIG.maxQty; i++) qty.add(new Option(String(i), String(i)));
+
+  const fromUrl = new URLSearchParams(location.search).get("lang");
+  const saved = store.get("localStorage", "elast1-lang");
+  lang = [fromUrl, saved, "fr"].find(l => l === "fr" || l === "en");
+
+  const savedOrder = store.get("sessionStorage", "elast1-order");
+  if (savedOrder) {
+    try {
+      const parsed = JSON.parse(savedOrder);
+      if (parsed && parsed.order && parsed.order.ref) { order = parsed.order; needsBackup = !!parsed.needsBackup; }
+    } catch (e) { /* ignore a corrupt entry */ }
+  }
+  render();
+  if (order) showConfirm(false);
+})();
+</script>
+</body>
+</html>
