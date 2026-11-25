@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ÉlasT1 : la montée à la volée avec tes souliers de route</title>
+<title>T1GO : la montée à la volée avec tes souliers de route</title>
 <meta name="description" content="Une languette adhésive amovible et un élastique pour garder tes souliers de route à l'horizontale en T1. Précommande à 7,99 $, livraison mi-décembre 2026.">
-<meta property="og:title" content="ÉlasT1 : la montée à la volée avec tes souliers de route">
+<meta property="og:title" content="T1GO : la montée à la volée avec tes souliers de route">
 <meta property="og:description" content="Précommande à 7,99 $ au lieu de 15,99 $. Paiement par virement Interac, livraison mi-décembre 2026.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -201,7 +201,7 @@
 <header class="hero on-blue">
   <div class="wrap">
     <nav class="nav" aria-label="Navigation">
-      <span class="brand display" data-brand>ÉlasT1</span>
+      <span class="brand display" data-brand>T1GO</span>
       <div class="lang" role="group" aria-label="Langue / Language">
         <button type="button" data-lang="fr" aria-pressed="true">FR</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -399,7 +399,7 @@
    Settings. Everything you are likely to change is here.
 ------------------------------------------------------------------- */
 const CONFIG = {
-  brand: "ÉlasT1",                          // working name
+  brand: "T1GO",                          // working name
   price: 7.99,                              // pre-order price, CAD
   regularPrice: 15.99,
   maxQty: 5,
@@ -726,7 +726,7 @@ $("#order-form").addEventListener("submit", async ev => {
 
   order = placed;
   needsBackup = !sent;
-  store.set("sessionStorage", "elast1-order", JSON.stringify({ order, needsBackup }));
+  store.set("sessionStorage", "t1go-order", JSON.stringify({ order, needsBackup }));
   showConfirm(true);
 });
 
@@ -737,7 +737,7 @@ $("#edit-order").addEventListener("click", () => {
   keptRef = order.ref;                 // a corrected order keeps the same reference
   fillForm(order);
   order = null;
-  store.del("sessionStorage", "elast1-order");
+  store.del("sessionStorage", "t1go-order");
   $("#confirm").hidden = true;
   $("#order-form").hidden = false;
   renderSummary();
@@ -764,7 +764,7 @@ $$(".copy").forEach(btn => btn.addEventListener("click", async () => {
 
 $$(".lang button").forEach(b => b.addEventListener("click", () => {
   lang = b.dataset.lang;
-  store.set("localStorage", "elast1-lang", lang);
+  store.set("localStorage", "t1go-lang", lang);
   render();
 }));
 
@@ -773,10 +773,10 @@ $$(".lang button").forEach(b => b.addEventListener("click", () => {
   for (let i = 1; i <= CONFIG.maxQty; i++) qty.add(new Option(String(i), String(i)));
 
   const fromUrl = new URLSearchParams(location.search).get("lang");
-  const saved = store.get("localStorage", "elast1-lang");
+  const saved = store.get("localStorage", "t1go-lang");
   lang = [fromUrl, saved, "fr"].find(l => l === "fr" || l === "en");
 
-  const savedOrder = store.get("sessionStorage", "elast1-order");
+  const savedOrder = store.get("sessionStorage", "t1go-order");
   if (savedOrder) {
     try {
       const parsed = JSON.parse(savedOrder);
